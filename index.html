@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
  <head>
   <meta charset="UTF-8"/>
@@ -17,11 +18,13 @@
          top: 50%;
          margin-top: -0.5em;
          text-align: center;
-       }
+        }
+     .contents_box::-webkit-scrollbar{ display: none; }
      </style>
  </head> 
 <body>
-  <p></p>
+  <p></p> 
+  <p1>JST%nbsp;UTC+9<p1>
 <script type="text/javascript">
 (function(d){
   var p = d.getElementsByTagName('p')[0];
@@ -31,7 +34,7 @@
         str =
           date.getFullYear() + '/' +
           ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-          ('0' + date.getDate()).slice(-2) + ' ' +
+          ('0' + date.getDate()).slice(-2) + '%ensp;' +
           ('0' + date.getHours()).slice(-2) + ':' +
           ('0' + date.getMinutes()).slice(-2) + ':' +
           ('0' + date.getSeconds()).slice(-2) + '.' +
@@ -49,3 +52,5 @@
 </script>
 </body>
 </html>
+
+<!--2023/09/14 start-->
