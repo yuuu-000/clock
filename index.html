@@ -1,49 +1,73 @@
 <!DOCTYPE html>
- <head>
-  <meta charset="UTF-8"/>
-  <link rel="icon" href="https://raw.githubusercontent.com/yuuu-000/clock/main/favicon.png">
-   <title>Do you have the time?</title>
-     <style type="text/css">body {
-         background-color: #f7f7f7;
-        .contents_box::-webkit-scrollbar{ display: none; }
-       }
-      p {
-         font-size: 3.5em;
-         font-weight: bold;  
-         font-family: sans-serify;
-         color: #013;
-         letter-spacing: 0.02em;
-         position: absolute;
-         width: 95%;
-         top: 50%;
-         margin-top: -0.2em;
-         text-align: center;
-        }
-     </style>
- </head> 
-<body>
-  <p></p> 
-  <script type="text/javascript">
-(function(d){
-  let p = d.getElementsByTagName('p')[0];
+<html lang="ja">
+  <head>
+        <meta charset="UTF-8">
+        <link rel="icon" href="https://raw.githubusercontent.com/yuuu-000/clock/main/favicon.png">
+        <title>Do you have the time?</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Chivo Mono フォント-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Edu+VIC+WA+NT+Beginner:wght@400;700&family=Fjalla+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+      <style type="text/css">
+                      
+              body {
+                  background: #000;
+                  width: 100%;
+                  height: 100%;
+                  margin: 0;
+                  padding: 0;
+                }
 
-  setInterval(function(){
-    let date = new Date(),
-        tim =
-          date.getFullYear() + '/' +
-          ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-          ('0' + date.getDate()).slice(-2) + ' ' +
-          ('0' + date.getHours()).slice(-2) + ':' +
-          ('0' + date.getMinutes()).slice(-2) + ':' +
-          ('0' + date.getSeconds()).slice(-2) + '.' +
-          ('00' + date.getMilliseconds()).slice(-3);
+              #day {
+                  width: 100%;
+                  text-align: center;
+                  font-family: "Chivo Mono", monospace;
+                  font-size: 3.2em;
+                  font-weight: 500;
+                  letter-spacing: -0.055em;
+                  color: #ffe;
+                  position: fixed;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  justify-content: center;     
+                
+                }
 
-    p.textContent = tim;
-  }, 0);
-}(document));
+       </style>
+  </head>
+ <body>
 
-</script>
-</body>
+     <div id="day"></div>
+
+    <script type="text/javascript">
+          (function(d){
+            
+            setInterval(function(){
+              const date = new Date(),
+                A =
+                            date.getFullYear() + '-' +
+                    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' +  date.getDate()).slice(-2) + ' '                     //　西暦,月,日 一桁の時に0埋め
+                    
+                B =
+                    (date.getDay());
+                C = 
+                    ["sun", "mon","tue", "wed", "thu", "fri", "sat"][B];        //　曜日を対応させる
+
+                D =  ' ' +
+                    ('0' +  date.getHours()).slice(-2) + ':' +
+                    ('0' +  date.getMinutes()).slice(-2) + ':' +
+                    ('0' +  date.getSeconds()).slice(-2) + '.' +           
+                    ('00' + date.getMilliseconds()).slice(-3);                  //　時,分,秒 一桁の時に0埋め
+                
+                document.getElementById("day").textContent = A + C + D;
+              }, 0);
+              }(document));   
+    </script>
+
+    </body>
 </html>
 
 <!--2023/09/14 start-->
