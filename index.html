@@ -33,6 +33,8 @@
               justify-content: center;
               color: #a8b6c1; 
               cursor: pointer;
+              outline: none;
+              -webkit-tap-highlight-color: transparent;
               }
 
        </style>
@@ -43,61 +45,60 @@
 
     <script type="text/javascript">
       (function(d){
-        
+      
         setInterval(function(){
-          const date = new Date(),
-            A =
-                        date.getFullYear() + '-' +
-                ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                ('0' +  date.getDate()).slice(-2) + ' '                     //　西暦,月,日 一桁の時に0埋め
-                
-            B =
-                (date.getDay());
-            C = 
-                ["Sun", "Mon","Tue", "Wed", "Thu", "Fri", "Sat"][B];        //　曜日を対応させる
+        const date = new Date(),
+          A =
+                      date.getFullYear() + '-' +
+              ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+              ('0' +  date.getDate()).slice(-2) + ' '                     //　西暦,月,日 一桁の時に0埋め
+              
+          B =
+              (date.getDay());
+          C = 
+              ["Sun", "Mon","Tue", "Wed", "Thu", "Fri", "Sat"][B];        //　曜日を対応させる
 
-            D =  ' ' +
-                ('0' +  date.getHours()).slice(-2) + ':' +
-                ('0' +  date.getMinutes()).slice(-2) + ':' +
-                ('0' +  date.getSeconds()).slice(-2) + '.' +           
-                ('00' + date.getMilliseconds()).slice(-3);                  //　時,分,秒,ミリ秒 一桁の時に0埋め
-            
-            document.getElementById("day").textContent = A + C + D;
-          }, 0);
-          }(document));   
+          D =  ' ' +
+              ('0' +  date.getHours()).slice(-2) + ':' +
+              ('0' +  date.getMinutes()).slice(-2) + ':' +
+              ('0' +  date.getSeconds()).slice(-2) + '.' +           
+              ('00' + date.getMilliseconds()).slice(-3);                  //　時,分,秒,ミリ秒 一桁の時に0埋め
+          
+          document.getElementById("day").textContent = A + C + D;
+        }, 0);
+        }(document));   
     </script>
 
     <script type="text/javascript">
-          const fullscreenButton = document.getElementById('day');          // フルスクリーンボタン
+        const fullscreenButton = document.getElementById('day');          // フルスクリーンボタン
 
-          fullscreenButton.addEventListener('click', () => {                // 起動と解除を同じボタンにする
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-              if (document.body.requestFullscreen) {
-                document.body.requestFullscreen();
-              } else if (document.body.webkitRequestFullscreen) { /* Safari */
-                document.body.webkitRequestFullscreen();
-              }
-            } else {
-              if (document.exitFullscreen) {
-                document.exitFullscreen();
-              } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen();
-              }
+        fullscreenButton.addEventListener('click', () => {                // 起動と解除を同じボタンにする
+          if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (document.body.requestFullscreen) {
+              document.body.requestFullscreen();
+            } else if (document.body.webkitRequestFullscreen) { /* Safari */
+              document.body.webkitRequestFullscreen();
             }
-          });
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+              document.webkitExitFullscreen();
+            }
+          }
+        });
     </script>
 
-
     <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-              var day = document.getElementById('day');
-              day.addEventListener('mouseover', function() {
-                this.style.color = '#ffe';                                  // テキスト色を変更
-              });
-              day.addEventListener('mouseout', function() {
-                this.style.color = '#a8b6c1';                               // テキスト色を元に戻す
-              });
+          document.addEventListener('DOMContentLoaded', function() {
+            var day = document.getElementById('day');
+            day.addEventListener('mouseover', function() {
+              this.style.color = '#ffe';                                  // テキスト色を変更
             });
+            day.addEventListener('mouseout', function() {
+              this.style.color = '#a8b6c1';                               // テキスト色を元に戻す
+            });
+          });
     </script>
 
     </body>
