@@ -4,6 +4,12 @@
         <meta charset="UTF-8">
         <link rel="icon" href="https://raw.githubusercontent.com/yuuu-000/clock/main/favicon.png">
         <title>Do you have the time?</title>
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="Do you have the time?">
+        <meta name="twitter:description" content=">現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ">
+        <meta name="twitter:image:src"
+          content="https://raw.githubusercontent.com/yuuu-000/clock/main/Twitter_card.jpg">
+        <meta name="twitter:domain" content="github.io">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Chivo Mono フォント -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,10 +99,10 @@
           document.addEventListener('DOMContentLoaded', function() {
             var day = document.getElementById('day');
             day.addEventListener('mouseover', function() {
-              this.style.color = '#ffe';                                  // テキスト色を変更
+              this.style.color = '#ffe';                                  // テキストの色を変更
             });
             day.addEventListener('mouseout', function() {
-              this.style.color = '#a8b6c1';                               // テキスト色を元に戻す
+              this.style.color = '#a8b6c1';                               // テキストの色を元に戻す
             });
           });
     </script>
