@@ -57,12 +57,12 @@
           A =
                       date.getFullYear() + '-' +
               ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-              ('0' +  date.getDate()).slice(-2) + ' '                     //　西暦,月,日 一桁の時に0埋め
+              ('0' +  date.getDate()).slice(-2) + ' ';                    //　西暦,月,日 一桁の時に0埋め
               
           B =
               (date.getDay());
           C = 
-              ["Sun", "Mon","Tue", "Wed", "Thu", "Fri", "Sat"][B];        //　曜日を対応させる
+              ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][B];       //　曜日を対応させる
 
           D =  ' ' +
               ('0' +  date.getHours()).slice(-2) + ':' +
