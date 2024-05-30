@@ -49,10 +49,9 @@
 
     <div id="day"></div>
 
-    <script type="text/javascript">
-      (function(d){
-      
+    <script type="text/javascript">     
         setInterval(function(){
+
         const date = new Date(),
           A =
                       date.getFullYear() + '-' +
@@ -72,7 +71,6 @@
           
           document.getElementById("day").textContent = A + C + D;
         }, 0);
-        }(document));   
     </script>
 
     <script type="text/javascript">
