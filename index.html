@@ -2,14 +2,14 @@
 <html lang="ja">
   <head>
         <meta charset="UTF-8">
-        <link rel="icon" href="https://raw.githubusercontent.com/yuuu-000/clock/main/favicon.png">
-        <title>Do you have the time?</title>
+        <link rel="icon" href="./favicon.png">
+        <title>Do you have the time?</title>        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="twitter:card" content="summary">
         <meta name="twitter:title" content="Do you have the time?">
         <meta name="twitter:description" content="現在時刻ミリ秒まで表示させるサイトjavascriptで作った 文字押したらフルスクリーン表示になってもう一回押せば解除されるよ 画面左上押せばPiPにも対応（環境次第）">
-        <meta name="twitter:image:src" content="https://raw.githubusercontent.com/yuuu-000/clock/main/Twitter_card.jpg">
+        <meta name="twitter:image:src" content="./Twitter_card.jpg">
         <meta name="twitter:domain" content="github.io">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Chivo Mono フォント -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,84 +58,84 @@
  <body>
 
     <div id="button">
-      <div id="OpenSVG" title="Open PiP"><img class="hover" src="https://raw.githubusercontent.com/yuuu-000/clock/6191e76237e7efe33afb24410631ab3e31b65eb6/PiP_Open.svg" width="65" hight="65" ></div>
-      <div id="CloseSVG" title="Close PiP"><img class="hover" src="https://raw.githubusercontent.com/yuuu-000/clock/6191e76237e7efe33afb24410631ab3e31b65eb6/PiP_Close.svg" width="65" hight="65"></div>
+      <div id="OpenSVG" title="Open PiP"><img class="hover" src="./PiP_Open.svg" width="65" hight="65" ></div>
+      <div id="CloseSVG" title="Close PiP"><img class="hover" src="./PiP_Close.svg" width="65" hight="65"></div>
     </div>
 
     <div id="day"></div>
     <div id="pipactive"></div>
 
-   <script type="text/javascript">
-      // #region CurrentTime
-        const day = document.getElementById("day");
-        const CurrentTime = () => {
+    <script type="text/javascript">
+        // #region CurrentTime
+          const day = document.getElementById("day");
+          const CurrentTime = () => {
 
-        const date = new Date()
-        const A =
-                      date.getFullYear() + "-" +
-              ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
-              ("0" +  date.getDate()).slice(-2) + " "               //　西暦,月,日 一桁の時に0埋め
-              
-        const B =
-              (date.getDay());
-        const C = 
-              ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][B]; //　曜日を対応させる
+          const date = new Date()
+          const A =
+                        date.getFullYear() + "-" +
+                ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                ("0" +  date.getDate()).slice(-2) + " "               //　西暦,月,日 一桁の時に0埋め
+                
+          const B =
+                (date.getDay());
+          const C = 
+                ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][B]; //　曜日を対応させる
 
-        const D =  " " +
-              ("0" +  date.getHours()).slice(-2) + ":" +
-              ("0" +  date.getMinutes()).slice(-2) + ":" +
-              ("0" +  date.getSeconds()).slice(-2) + "." +           
-              ("00" + date.getMilliseconds()).slice(-3);            //　時,分,秒 一桁の時に0埋め
-          
-          day.textContent = A + C + D;
-        };
-        setInterval(CurrentTime, 0);
-      // #endregion
+          const D =  " " +
+                ("0" +  date.getHours()).slice(-2) + ":" +
+                ("0" +  date.getMinutes()).slice(-2) + ":" +
+                ("0" +  date.getSeconds()).slice(-2) + "." +           
+                ("00" + date.getMilliseconds()).slice(-3);            //　時,分,秒 一桁の時に0埋め
+            
+            day.textContent = A + C + D;
+          };
+          setInterval(CurrentTime, 0);
+        // #endregion
 
-      // #region fullscreen
-        const fullscreenButton = document.getElementById("day");          // フルスクリーンボタン
+        // #region fullscreen
+          const fullscreenButton = document.getElementById("day");          // フルスクリーンボタン
 
-        fullscreenButton.addEventListener("click", () => {                // 起動と解除を同じボタンにする
-          if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-            if (document.body.requestFullscreen) {
-              document.body.requestFullscreen();
-            } else if (document.body.webkitRequestFullscreen) { /* Safari */
-              document.body.webkitRequestFullscreen();
+          fullscreenButton.addEventListener("click", () => {                // 起動と解除を同じボタンにする
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+              if (document.body.requestFullscreen) {
+                document.body.requestFullscreen();
+              } else if (document.body.webkitRequestFullscreen) { /* Safari */
+                document.body.webkitRequestFullscreen();
+              }
+            } else {
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+              }
             }
-          } else {
-            if (document.exitFullscreen) {
-              document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) { /* Safari */
-              document.webkitExitFullscreen();
-            }
-          }
-        });
-      // #endregion
-
-      // #region colorchange
-          document.addEventListener("DOMContentLoaded", function() {
-            let day = document.getElementById("day");
-            day.addEventListener("mouseover", function() {
-              this.style.color = "#ffe";                                  // テキストの色を変更
-            });
-            day.addEventListener("mouseout", function() {
-              this.style.color = "#a8b6c1";                               // テキストの色を元に戻す
-            });
           });
-      // #endregion
-          
-      // #region Picture-in-Picture
-          const OpenSVG = document.getElementById("OpenSVG");
-          const CloseSVG = document.getElementById("CloseSVG");
-          const pipButton = document.getElementById("button"); 
+        // #endregion
 
-          CloseSVG.style.display = "none";        
+        // #region colorchange
+            document.addEventListener("DOMContentLoaded", function() {
+              let day = document.getElementById("day");
+              day.addEventListener("mouseover", function() {
+                this.style.color = "#ffe";                                  // テキストの色を変更
+              });
+              day.addEventListener("mouseout", function() {
+                this.style.color = "#a8b6c1";                               // テキストの色を元に戻す
+              });
+            });
+        // #endregion
+            
+        // #region Picture-in-Picture
+            const OpenSVG = document.getElementById("OpenSVG");
+            const CloseSVG = document.getElementById("CloseSVG");
+            const pipButton = document.getElementById("button"); 
 
-          if ("documentPictureInPicture" in window) {
+            CloseSVG.style.display = "none";        
 
-            let pipWindow = null;
-            let Container = null;
-           
+            if ("documentPictureInPicture" in window) {
+
+              let pipWindow = null;
+              let Container = null;
+            
             // openの処理
             async function OpenPiP() {
               const player = document.querySelector("#day");
@@ -208,22 +208,22 @@
                   alert("SORRY!!    This device does not support PiP😭😭");                
                 });
               }
-      // #endregion 
-       
-      // #region FirstLoad
-            const explain = "現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ\n画面左上押せばPicture-in-Pictureにも対応(環境による) メモリアホほど食うかもだけど\n\n今後このメッセージを表示しないなら [OK]";
+        // #endregion 
+        
+        // #region FirstLoad
+              const explain = "現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ\n画面左上押せばPicture-in-Pictureにも対応(環境による)(メモリアホほど食うかも)\n\n今後このメッセージを表示しないなら [OK]";
 
-            window.onload = function() {
-                if (!localStorage.getItem("FirstLoad")) {
-                    let check = confirm(explain);
+              window.onload = function() {
+                  if (!localStorage.getItem("FirstLoad")) {
+                      let check = confirm(explain);
 
-                   if (check) {
-                      localStorage.setItem("FirstLoad", true);
-                     }
-                }
-               };
-      // #endregion
-   </script>
+                    if (check) {
+                        localStorage.setItem("FirstLoad", true);
+                      }
+                  }
+                };
+        // #endregion
+    </script>
  </body>
 </html>
 
