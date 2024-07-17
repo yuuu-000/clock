@@ -209,6 +209,20 @@
                 });
               }
       // #endregion 
+       
+      // #region FirstLoad
+            const explain = "現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ\n画面左上押せばPicture-in-Pictureにも対応(環境による) メモリアホほど食うかもだけど\n\n今後このメッセージを表示しないなら [OK]";
+
+            window.onload = function() {
+                if (!localStorage.getItem("FirstLoad")) {
+                    let check = confirm(explain);
+
+                   if (check) {
+                      localStorage.setItem("FirstLoad", true);
+                     }
+                }
+               };
+      // #endregion
    </script>
  </body>
 </html>
