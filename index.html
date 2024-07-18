@@ -15,7 +15,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Edu+VIC+WA+NT+Beginner:wght@400;700&family=Fjalla+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
       <style type="text/css">
-          ::selection{ background-color: #000; color: #af84d4; }
+          ::selection{ background-color: #000; color: #b8d; }
 
           body {
               background: #000;
@@ -142,10 +142,10 @@
               Container = player.parentNode;
 
               pipWindow = await documentPictureInPicture.requestWindow({
-                lockAspectRatio: true,
-                initialAspectRatio: 7 / 3,
                 disallowReturnToOpener: true,
-                copyStyleSheets: true
+                copyStyleSheets: true,
+                width : 450,
+                height: 200
               });
 
               [...document.styleSheets].forEach((styleSheet) => {
