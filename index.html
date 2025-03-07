@@ -1,230 +1,244 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-        <meta charset="UTF-8">
-        <link rel="icon" href="./favicon.png">
-        <title>Do you have the time?</title>        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:title" content="Do you have the time?">
-        <meta name="twitter:description" content="現在時刻ミリ秒まで表示させるサイトjavascriptで作った 文字押したらフルスクリーン表示になってもう一回押せば解除されるよ 画面左上押せばPiPにも対応（環境次第）">
-        <meta name="twitter:image:src" content="./Twitter_card.jpg">
-        <meta name="twitter:domain" content="github.io">
-        <!-- Chivo Mono フォント -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Edu+VIC+WA+NT+Beginner:wght@400;700&family=Fjalla+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-      <style type="text/css">
-          ::selection{ background-color: #000; color: #b8d; }
+    <meta charset="UTF-8">
+    <link rel="icon" href="./favicon.png">
+    <title>Do you have the time?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Do you have the time?">
+    <meta name="twitter:description" content="現在時刻ミリ秒まで表示させるサイトjavascriptで作った 文字押したらフルスクリーン表示になってもう一回押せば解除されるよ 画面左上押せばPiPにも対応（環境次第）">
+    <meta name="twitter:image:src" content="./Twitter_card.jpg">
+    <meta name="twitter:domain" content="github.io">
+    <!-- Chivo Mono フォント -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Edu+VIC+WA+NT+Beginner:wght@400;700&family=Fjalla+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style type="text/css">
+      ::selection {
+        background-color: #000;
+        color: #b8d;
+      }
 
-          body {
-              background: #000;
-              width: 100%;
-              height: 100%;
-              margin: 0;
-              padding: 0;
-              -webkit-tap-highlight-color: transparent;
-              }
+      body {
+        background: #000;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
 
-          #day, #pipactive {
-              width: 100vw;
-              text-align: center;
-              font-size: calc(1rem + 1.3vw);            
-              font-family: "Chivo Mono", monospace;
-              font-weight: 500;
-              letter-spacing: -0.055em;
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              justify-content: center;
-              color: #a8b6c1; 
-              cursor: none;
-              outline: none;
-              }
+      #day, #pipactive {
+        width: 100vw;
+        text-align: center;
+        font-size: calc(1rem + 1.3vw);
+        font-family: "Chivo Mono", monospace;
+        font-weight: 500;
+        letter-spacing: -0.055em;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        justify-content: center;
+        color: #a8b6c1;
+        cursor: none;
+        outline: none;
+      }
 
-          #button {
-              padding: 0.2% 1% 0% 0.7%;
-              width: fit-content;
-              user-select: none;
-              cursor: pointer;
-              }  
+      #button {
+        padding: 0.2% 1% 0% 0.7%;
+        width: fit-content;
+        user-select: none;
+        cursor: pointer;
+      }
 
-          #button:hover {
-              filter: invert(77%) sepia(19%) saturate(181%) hue-rotate(164deg) brightness(89%) contrast(94%);
-              }
-      </style>
+      #button:hover {
+        filter: invert(77%) sepia(19%) saturate(181%) hue-rotate(164deg) brightness(89%) contrast(94%);
+      }
+    </style>
   </head>
- <body>
+  <body>
 
     <div id="button">
-      <div id="OpenSVG" title="Open PiP"><img src="./PiP_Open.svg" width="65" hight="65" ></div>
-      <div id="CloseSVG" title="Close PiP"><img src="./PiP_Close.svg" width="65" hight="65"></div>
+      <div id="OpenSVG" title="Open PiP"><img src="./PiP_Open.svg" width="65" height="65"></div>
+      <div id="CloseSVG" title="Close PiP"><img src="./PiP_Close.svg" width="65" height="65"></div>
     </div>
 
     <div id="day"></div>
     <div id="pipactive"></div>
 
     <script type="text/javascript">
-        // #region CurrentTime
-          const day = document.getElementById("day");
-          const CurrentTime = () => {
+      // #region CurrentTime
+      const day = document.getElementById("day");
+      let timeOffset = 0;
 
-          const date = new Date()
+      // サーバー時刻を取得してオフセットを計算fetch("https://3fe5a5f690efc790d4764f1c528a4ebb89fa4168.nict.go.jp/cgi-bin/json")
+      .then(response => response.json())
+      .then(data => {
+        const serverUnixTime = data.st * 1000;
+        const deviceUnixTime = Date.now();
+        timeOffset = serverUnixTime - deviceUnixTime;
+
+        const CurrentTime = () => {
+          const milli_unix = Date.now() + timeOffset;
+
+          // Dateオブジェクトを作成
+          const date = new Date(milli_unix);
+
+          // 年月日（西暦, 月, 日）を取得
           const A =
-                        date.getFullYear() + "-" +
-                ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
-                ("0" +  date.getDate()).slice(-2) + " "               //　西暦,月,日 一桁の時に0埋め
-                
-          const B =
-                (date.getDay());
-          const C = 
-                ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][B]; //　曜日を対応させる
+            date.getFullYear() + "-" +
+            ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + date.getDate()).slice(-2) + " "; // 一桁の月と日を0埋め
 
-          const D =  " " +
-                ("0" +  date.getHours()).slice(-2) + ":" +
-                ("0" +  date.getMinutes()).slice(-2) + ":" +
-                ("0" +  date.getSeconds()).slice(-2) + "." +           
-                ("00" + date.getMilliseconds()).slice(-3);            //　時,分,秒 一桁の時に0埋め
-            
-            day.textContent = A + C + D;
-          };
-          setInterval(CurrentTime, 0);
-        // #endregion
+          // 曜日を取得
+          const B = date.getDay();
+          const C = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][B]; // 曜日を対応させる
 
-        // #region fullscreen
-          const fullscreenButton = document.getElementById("day");          // フルスクリーンボタン
+          // 時間、分、秒、ミリ秒を取得
+          const D =
+            " " +
+            ("0" + date.getHours()).slice(-2) + ":" +
+            ("0" + date.getMinutes()).slice(-2) + ":" +
+            ("0" + date.getSeconds()).slice(-2) + "." +
+            ("00" + date.getMilliseconds()).slice(-3); // 時, 分, 秒, ミリ秒 一桁の時に0埋め
 
-          fullscreenButton.addEventListener("click", () => {                // 起動と解除を同じボタンにする
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-              if (document.body.requestFullscreen) {
-                document.body.requestFullscreen();
-              } else if (document.body.webkitRequestFullscreen) { /* Safari */
-                document.body.webkitRequestFullscreen();
-              }
-            } else {
-              if (document.exitFullscreen) {
-                document.exitFullscreen();
-              } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen();
-              }
+          day.textContent = A + C + D;
+        };
+        setInterval(CurrentTime, 0);
+      });
+      // #endregion
+      // #region fullscreen
+      const fullscreenButton = document.getElementById("day"); // フルスクリーンボタン
+
+      fullscreenButton.addEventListener("click", () => { // 起動と解除を同じボタンにする
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          if (document.body.requestFullscreen) {
+            document.body.requestFullscreen();
+          } else if (document.body.webkitRequestFullscreen) { /* Safari */
+            document.body.webkitRequestFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+          }
+        }
+      });
+      // #endregion
+      // #region colorchange
+      document.addEventListener("DOMContentLoaded", function() {
+        let day = document.getElementById("day");
+        day.addEventListener("mouseover", function() {
+          this.style.color = "#ffe"; // テキストの色を変更
+        });
+        day.addEventListener("mouseout", function() {
+          this.style.color = "#a8b6c1"; // テキストの色を元に戻す
+        });
+      });
+      // #endregion
+      // #region Picture-in-Picture
+      const OpenSVG = document.getElementById("OpenSVG");
+      const CloseSVG = document.getElementById("CloseSVG");
+      const pipButton = document.getElementById("button");
+
+      CloseSVG.style.display = "none";
+
+      if ("documentPictureInPicture" in window) {
+
+        let pipWindow = null;
+        let Container = null;
+
+        // openの処理
+        async function OpenPiP() {
+          const player = document.querySelector("#day");
+          Container = player.parentNode;
+
+          pipWindow = await documentPictureInPicture.requestWindow({
+            disallowReturnToOpener: true,
+            copyStyleSheets: true,
+            width: 450,
+            height: 200
+          });
+
+          [...document.styleSheets].forEach((styleSheet) => {
+            try {
+              const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
+              const style = document.createElement("style");
+
+              style.textContent = cssRules;
+              pipWindow.document.head.appendChild(style);
+            } catch (e) {
+              const link = document.createElement("link");
+
+              link.rel = "stylesheet";
+              link.type = styleSheet.type;
+              link.media = styleSheet.media;
+              link.href = styleSheet.href;
+              pipWindow.document.head.appendChild(link);
             }
           });
-        // #endregion
 
-        // #region colorchange
-            document.addEventListener("DOMContentLoaded", function() {
-              let day = document.getElementById("day");
-              day.addEventListener("mouseover", function() {
-                this.style.color = "#ffe";                                  // テキストの色を変更
-              });
-              day.addEventListener("mouseout", function() {
-                this.style.color = "#a8b6c1";                               // テキストの色を元に戻す
-              });
-            });
-        // #endregion
-            
-        // #region Picture-in-Picture
-            const OpenSVG = document.getElementById("OpenSVG");
-            const CloseSVG = document.getElementById("CloseSVG");
-            const pipButton = document.getElementById("button"); 
+          pipWindow.document.body.append(player);
 
-            CloseSVG.style.display = "none";        
+          OpenSVG.style.display = "none";
+          CloseSVG.style.display = "block";
+          document.getElementById("pipactive").textContent = "Picture in Picture Mode Is Active Now";
 
-            if ("documentPictureInPicture" in window) {
+          // PiPウインドウ上のxを押された時の処理
+          pipWindow.addEventListener("unload", ClosePiP.bind(pipWindow), {
+            once: true
+          });
+        }
 
-              let pipWindow = null;
-              let Container = null;
-            
-            // openの処理
-            async function OpenPiP() {
-              const player = document.querySelector("#day");
-              Container = player.parentNode;
+        // closeの処理
+        function ClosePiP() {
+          if (this !== pipWindow) {
+            return;
+          }
+          const player = pipWindow.document.querySelector("#day");
+          Container.append(player);
+          pipWindow.close();
+          OpenSVG.style.display = "block";
+          CloseSVG.style.display = "none";
+          document.getElementById("pipactive").textContent = "";
 
-              pipWindow = await documentPictureInPicture.requestWindow({
-                disallowReturnToOpener: true,
-                copyStyleSheets: true,
-                width : 450,
-                height: 200
-              });
+          pipWindow = null;
+          Container = null;
+        }
 
-              [...document.styleSheets].forEach((styleSheet) => {
-                try {
-                  const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
-                  const style = document.createElement("style");
+        // クリックで実行
+        pipButton.addEventListener("click", () => {
+          if (!pipWindow) {
+            OpenPiP();
+          } else {
+            ClosePiP.bind(pipWindow)();
+          }
+        });
+      } else {
+        //PiP非対応の処理
+        pipButton.addEventListener("click", () => {
+          alert("SORRY!! This device does not support PiP😭😭");
+        });
+      }
+      // #endregion
+      // #region FirstLoad
+      const explain = "現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ\n画面左上押せばPicture-in-Pictureにも対応(環境による)(メモリアホほど食うかも)\n\n今後このメッセージを表示しないなら [OK]";
 
-                  style.textContent = cssRules;
-                  pipWindow.document.head.appendChild(style);
-                } catch (e) {
-                  const link = document.createElement("link");
+      window.onload = function() {
+        if (!localStorage.getItem("FirstLoad")) {
+          let check = confirm(explain);
 
-                  link.rel = "stylesheet";
-                  link.type = styleSheet.type;
-                  link.media = styleSheet.media;
-                  link.href = styleSheet.href;
-                  pipWindow.document.head.appendChild(link);
-                }
-              });
-
-                pipWindow.document.body.append(player);
-
-                OpenSVG.style.display = "none";        
-                CloseSVG.style.display = "block";
-                document.getElementById("pipactive").textContent = "Picture in Picture Mode Is Active Now";
-
-                // PiPウインドウ上のxを押された時の処理
-                pipWindow.addEventListener("unload", ClosePiP.bind(pipWindow), {
-                  once: true
-                });
-              }
-
-                // closeの処理
-                function ClosePiP() {
-                  if (this !== pipWindow) {
-                    return;
-                  }
-                  const player = pipWindow.document.querySelector("#day");
-                  Container.append(player);
-                  pipWindow.close();
-                  OpenSVG.style.display = "block"; 
-                  CloseSVG.style.display = "none";
-                  document.getElementById("pipactive").textContent = "";
-
-                  pipWindow = null;
-                  Container = null;
-              }
-
-                // クリックで実行
-                pipButton.addEventListener("click", () => {
-                  if (!pipWindow) {
-                    OpenPiP();
-                  } else {
-                    ClosePiP.bind(pipWindow)();
-                  }
-                });
-              } else {
-                //PiP非対応の処理 
-                pipButton.addEventListener("click", () => {
-                  alert("SORRY!!    This device does not support PiP😭😭");                
-                });
-              }
-        // #endregion 
-        
-        // #region FirstLoad
-              const explain = "現在時刻ミリ秒まで表示させるサイトjavascriptで作った\n文字押したらフルスクリーン表示になってもう一回押せば解除されるよ\n画面左上押せばPicture-in-Pictureにも対応(環境による)(メモリアホほど食うかも)\n\n今後このメッセージを表示しないなら [OK]";
-
-              window.onload = function() {
-                  if (!localStorage.getItem("FirstLoad")) {
-                      let check = confirm(explain);
-
-                    if (check) {
-                        localStorage.setItem("FirstLoad", true);
-                      }
-                  }
-                };
-        // #endregion
+          if (check) {
+            localStorage.setItem("FirstLoad", true);
+          }
+        }
+      };
+      // #endregion
     </script>
- </body>
+  </body>
 </html>
 
 <!--2023/09/14 start-->
