@@ -73,7 +73,8 @@
       const day = document.getElementById("day");
       let timeOffset = 0;
 
-      // サーバー時刻を取得してオフセットを計算fetch("https://3fe5a5f690efc790d4764f1c528a4ebb89fa4168.nict.go.jp/cgi-bin/json")
+      // サーバー時刻を取得してオフセットを計算
+      fetch("https://3fe5a5f690efc790d4764f1c528a4ebb89fa4168.nict.go.jp/cgi-bin/json")
       .then(response => response.json())
       .then(data => {
         const serverUnixTime = data.st * 1000;
